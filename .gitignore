@@ -1,0 +1,14 @@
+# бинарник
+multisync
+
+# конфиг с паролями
+config.yaml
+
+# локальные папки
+local_data/
+
+# состояние синхронизации
+.multisync_state.json
+
+# логи
+*.log

@@ -1,0 +1,30 @@
+sync_jobs:
+  - name: "test_sync"
+    local_path: "./local_data"
+    webdav:
+      url: "http://localhost:8080"
+      user: "test"
+      password: "pass"
+      remote_path: "/"
+    interval: "10s"
+    direction: "both"
+    
+  - name: "multi_test"
+    local_path: "./shared"
+    webdav:
+      - url: "http://server1.local/webdav"
+        user: "user1"
+        password: "pass1"
+        remote_path: "/shared"
+      - url: "http://server2.local/webdav"
+        user: "user2"
+        password: "pass2"
+        remote_path: "/incoming"
+    interval: "15s"
+    direction: "upload-only"
+    exclude: ["*.tmp", "*.log"]
+
+global:
+  log_level: "debug"
+  log_file: "/var/log/multisync.log"
+  pid_file: "/var/run/multisync.pid"
