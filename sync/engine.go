@@ -25,8 +25,10 @@ func Compare(local, remote []webdav.FileInfo) (toUpload, toDownload []webdav.Fil
 
 		if !ok {
 			toUpload = append(toUpload, localFile)
-
 		} else {
+			if localFile.Size == remoteFile.Size {
+				continue
+			}
 			newer, err := IsNewer(localFile.Modified, remoteFile.Modified)
 
 			if err != nil {
@@ -47,6 +49,7 @@ func Compare(local, remote []webdav.FileInfo) (toUpload, toDownload []webdav.Fil
 		if !ok {
 			toDownload = append(toDownload, remoteFile)
 		}
+
 	}
 
 	return toUpload, toDownload, nil, nil
@@ -54,6 +57,7 @@ func Compare(local, remote []webdav.FileInfo) (toUpload, toDownload []webdav.Fil
 
 // IsNewer возвращает true, если data1 новее data2. Даты в формате RFC3339
 func IsNewer(data1, data2 string) (bool, error) {
+
 	t1, err := time.Parse(time.RFC3339, data1)
 	if err != nil {
 		return false, fmt.Errorf("data parse error: %w", err)

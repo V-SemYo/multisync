@@ -32,7 +32,7 @@ type PropStat struct {
 type Prop struct {
 	DisplayName      string       `xml:"DAV: displayname"`
 	GetContentLength int64        `xml:"DAV: getcontentlength"`
-	GetLastmodified  string       `xml:"DAV: getlastmodified"`
+	GetLastModified  string       `xml:"DAV: getlastmodified"`
 	ResourceType     ResourceType `xml:"DAV: resourcetype"`
 }
 
@@ -47,7 +47,7 @@ func (r *Response) ToFileInfo() FileInfo {
 		Path:     r.Href,
 		Name:     r.PropStat.Prop.DisplayName,
 		Size:     r.PropStat.Prop.GetContentLength,
-		Modified: r.PropStat.Prop.GetLastmodified,
+		Modified: r.PropStat.Prop.GetLastModified,
 		IsDir:    r.PropStat.Prop.ResourceType.Collection != nil,
 	}
 }

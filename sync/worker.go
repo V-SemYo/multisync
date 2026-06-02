@@ -67,6 +67,9 @@ func (w *Worker) Run(ctx context.Context) error {
 			toUpload, toDownload, _, _ := Compare(localFiles, remoteFiles)
 
 			for _, localFile := range toUpload {
+				if localFile.IsDir {
+					continue
+				}
 				localPath := filepath.Join(w.Job.LocalPath, localFile.Path)
 				remotePath := w.Server.RemotePath + "/" + localFile.Path
 				err := w.Client.Upload(localPath, remotePath)
@@ -78,6 +81,9 @@ func (w *Worker) Run(ctx context.Context) error {
 			}
 
 			for _, remoteFile := range toDownload {
+				if remoteFile.IsDir {
+					continue
+				}
 				localPath := filepath.Join(w.Job.LocalPath, remoteFile.Path)
 				remotePath := w.Server.RemotePath + "/" + remoteFile.Path
 				err := w.Client.Download(remotePath, localPath)
@@ -110,6 +116,9 @@ func (w *Worker) RunOnce(ctx context.Context) error {
 	toUpload, toDownload, _, _ := Compare(localFiles, remoteFiles)
 
 	for _, localFile := range toUpload {
+		if localFile.IsDir {
+			continue
+		}
 		localPath := filepath.Join(w.Job.LocalPath, localFile.Path)
 		remotePath := w.Server.RemotePath + "/" + localFile.Path
 		err := w.Client.Upload(localPath, remotePath)
@@ -121,6 +130,9 @@ func (w *Worker) RunOnce(ctx context.Context) error {
 	}
 
 	for _, remoteFile := range toDownload {
+		if remoteFile.IsDir {
+			continue
+		}
 		localPath := filepath.Join(w.Job.LocalPath, remoteFile.Path)
 		remotePath := w.Server.RemotePath + "/" + remoteFile.Path
 		err := w.Client.Download(remotePath, localPath)

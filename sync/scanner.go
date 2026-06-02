@@ -26,8 +26,16 @@ func ScanLocal(localPath string) ([]webdav.FileInfo, error) {
 			return fmt.Errorf("file info request error: %w", err)
 		}
 
-		relPath := strings.TrimPrefix(path, localPath)
-		relPath = strings.TrimLeft(relPath, "/")
+		relPath, err := filepath.Rel(localPath, path)
+		if err != nil {
+			return fmt.Errorf("filepath error: %v", err)
+		}
+
+		if relPath == "." {
+			return nil
+		}
+
+		relPath = "/" + relPath
 
 		fileInfo := webdav.FileInfo{
 			Path:     relPath,
