@@ -28,26 +28,15 @@ curl -u test:pass http://localhost:8080/hello.txt
 
 ## Команды
 
-run — бесконечный цикл синхронизации (демон):
-./multisync --config config.yaml
-
-run --once — один проход и выход:
-./multisync --config config.yaml --once
-
-validate — проверить доступность всех WebDAV серверов:
-./multisync validate --config config.yaml
-
-sync --job — синхронизировать одну задачу по имени:
-./multisync sync --job backup --config config.yaml
-
-start — запустить как демон с PID-файлом:
-./multisync start --config config.yaml
-
-stop — остановить демон:
-./multisync stop --config config.yaml
-
-status — проверить работает ли демон:
-./multisync status --config config.yaml
+| Команда | Пример |
+|---------|--------|
+| `run` (демон) | `./multisync --config config.yaml` |
+| `run --once` | `./multisync --config config.yaml --once` |
+| `validate` | `./multisync validate --config config.yaml` |
+| `sync --job` | `./multisync sync --job backup --config config.yaml` |
+| `start` | `./multisync start --config config.yaml` |
+| `stop` | `./multisync stop --config config.yaml` |
+| `status` | `./multisync status --config config.yaml` |
 
 ## Режимы синхронизации
 
@@ -57,6 +46,7 @@ download-only — только скачивание изменений с сер
 
 ## Пример конфига (config.yaml)
 
+```yaml
 sync_jobs:
   - name: "backup"
     local_path: "/home/user/documents"
@@ -73,9 +63,11 @@ global:
   log_level: "info"
   log_file: "/var/log/multisync.log"
   pid_file: "/var/run/multisync.pid"
+```
 
-Поле webdav может быть одним сервером или списком серверов. Если указан список, одна локальная папка синхронизируется на несколько серверов одновременно:
+Поле `webdav` может быть одним сервером или списком серверов:
 
+```yaml
 webdav:
   - url: "http://server1/webdav"
     user: "user1"
@@ -85,6 +77,8 @@ webdav:
     user: "user2"
     password: "pass2"
     remote_path: "/incoming"
+```
+
 
 Поле exclude — необязательное. Принимает паттерны файлов, которые нужно игнорировать (*.tmp, *.log, .DS_Store).
 
@@ -116,10 +110,15 @@ WebDAV сервер (можно запустить в Docker: bytemark/webdav)
 ## Структура проекта
 
 multisync/
-├── main.go          — CLI (7 команд)
-├── config/          — YAML конфиг (структуры и парсер)
-├── webdav/          — WebDAV клиент (PROPFIND, GET, PUT, DELETE, MKCOL)
-├── sync/            — движок синхронизации (сканер, сравнение, воркер)
-├── logger/          — логгер с уровнями
+├── main.go
+— CLI (7 команд)
+├── config/
+— YAML конфиг (структуры и парсер)
+├── webdav/
+— WebDAV клиент (PROPFIND, GET, PUT, DELETE, MKCOL)
+├── sync/
+— движок синхронизации (сканер, сравнение, воркер)
+├── logger/
+— логгер с уровнями
 ├── Makefile
 └── README.md
